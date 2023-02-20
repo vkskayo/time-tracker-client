@@ -2,8 +2,11 @@ import { useState } from "react";
 import { GiPlayButton } from "react-icons/gi";
 import { BsStopFill } from "react-icons/bs";
 
-function Task() {
+function Task({ id }) {
   const [started, setStarted] = useState(false);
+  const pointing = {
+    cursor: "pointer",
+  };
 
   function handleStartTask() {
     setStarted(true);
@@ -50,9 +53,19 @@ function Task() {
         <p>0:03 - 1:04</p>
         <p>1 h 01 min</p>
         {!started ? (
-          <GiPlayButton onClick={handleStartTask} color="white" size={30} />
+          <GiPlayButton
+            style={pointing}
+            onClick={handleStartTask}
+            color="white"
+            size={30}
+          />
         ) : (
-          <BsStopFill onClick={handleStopTask} color="red" size={30} />
+          <BsStopFill
+            style={pointing}
+            onClick={handleStopTask}
+            color="red"
+            size={30}
+          />
         )}
       </div>
     </div>

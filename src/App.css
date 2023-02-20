@@ -21,6 +21,25 @@ p {
   margin: 0;
 }
 
+.day-bar {
+  width: 400px;
+  height: 100vh;
+  background-color: rgb(36, 36, 42);
+  /*   overflow-y: scroll; */
+  overflow-x: hidden;
+  border: solid 1px white;
+}
+
+.day-bar-item {
+  border: solid 1px;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.day-bar-item:hover {
+  background-color: gray;
+}
+
 /* #root {
   max-width: 1280px;
   margin: 0 auto;
