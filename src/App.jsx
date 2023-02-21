@@ -2,10 +2,31 @@ import { useState } from "react";
 import DayNavigator from "./components/DayNavigator";
 import TaskTable from "./components/TasksTable";
 import DayBarItem from "./components/DayBarItem";
+import { useQuery, gql, useLazyQuery } from "@apollo/client";
 import "./App.css";
 
 function App() {
   const [today, setToday] = useState("");
+  const [days, setDays] = useState([]);
+
+  const DAYS = gql`
+    query {
+      getDays {
+        id
+        title
+        description
+        hoursWorked
+        date
+      }
+    }
+  `;
+
+  const { loading, error, data } = useQuery(DAYS, {
+    onCompleted: (queryData) => {
+      setDays(queryData);
+    },
+  });
+  console.log(days);
   return (
     <div className="App">
       <div className="d-flex">
