@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-function DayBarItem() {
+function DayBarItem({ title, date, id }) {
   return (
     <div className="col-12 text-center text-light day-bar-item">
-      11/02/2003 - Title
+      {date} - {title}
     </div>
   );
 }

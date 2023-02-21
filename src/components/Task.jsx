@@ -36,9 +36,9 @@ function Task({ id }) {
   return (
     <div className="d-flex justify-content-between col-12 border p-2">
       <div className="d-flex gap-4 align-items-center">
-        <div class="form-check">
+        <div className="form-check">
           <input
-            class="form-check-input"
+            className="form-check-input"
             type="checkbox"
             value=""
             id="flexCheckDefault"

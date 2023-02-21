@@ -23,19 +23,25 @@ function App() {
 
   const { loading, error, data } = useQuery(DAYS, {
     onCompleted: (queryData) => {
-      setDays(queryData);
+      setDays(queryData.getDays);
     },
   });
   console.log(days);
   return (
     <div className="App">
-      <div className="d-flex">
-        <div className="day-bar text-light">
+      <div className="d-flex home-page-container">
+        <div className="day-bar text-light d-none d-md-block col-3">
           <h4 className="p-4">Registered Days</h4>
-          <DayBarItem />
-          <DayBarItem />
-          <DayBarItem />
-          <DayBarItem />
+          {days.map((day) => {
+            return (
+              <DayBarItem
+                key={day.id}
+                id={day.id}
+                title={day.title}
+                date={day.date}
+              />
+            );
+          })}
         </div>
 
         <div className="d-flex flex-column col-10 mx-auto">

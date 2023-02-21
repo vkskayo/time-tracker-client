@@ -22,7 +22,7 @@ p {
 }
 
 .day-bar {
-  width: 400px;
+  /*   width: 400px; */
   height: 100vh;
   background-color: rgb(36, 36, 42);
   /*   overflow-y: scroll; */
@@ -38,6 +38,10 @@ p {
 
 .day-bar-item:hover {
   background-color: gray;
+}
+
+.home-page-container {
+  overflow-x: hidden;
 }
 
 /* #root {
