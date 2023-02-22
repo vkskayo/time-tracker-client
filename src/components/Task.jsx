@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GiPlayButton } from "react-icons/gi";
 import { BsStopFill } from "react-icons/bs";
 
@@ -7,6 +7,7 @@ function Task({ id }) {
   const pointing = {
     cursor: "pointer",
   };
+  const [dateStart, setDateStart] = useState(new Date());
 
   function handleStartTask() {
     setStarted(true);
@@ -18,12 +19,21 @@ function Task({ id }) {
         " minutes."
     );
 
+    console.log(new Date());
+    setDateStart(new Date());
+
     // Fazer um update na task, atualizando no banco de dados a hora da última vez que a tarefa foi inicializada
     // Faço a diferença do horario atual com o horario calculado acima e somo com as horas trabalhadas na tarefa do banco de dados
     // O ultimo valor calculado nada mais é que a quantidade de tempo trabalhado na tarefa em tempo real
     // Provavelmente a colocarei em uma variavel de estado que vai estar sendo constantemente calculada(a cada 1 minuto)
     //Depois só colocar no frontend pro usuario
   }
+
+  /*  useEffect(() => {
+    setInterval(() => {
+      console.log((new Date() - dateStart) / 1000);
+    }, 1000);
+  }, []); */
 
   function handleStopTask() {
     setStarted(false);
