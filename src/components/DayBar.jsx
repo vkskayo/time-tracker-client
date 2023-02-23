@@ -23,12 +23,6 @@ function DayBar() {
     },
   });
 
-  console.log(useParams());
-
-  if (Object.keys(useParams()).length === 0) {
-    console.log("home");
-  }
-
   return (
     <div className="day-bar text-light d-none d-md-block col-3">
       {Object.keys(useParams()).length > 0 ? (

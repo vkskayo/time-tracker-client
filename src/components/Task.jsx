@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { GiPlayButton } from "react-icons/gi";
 import { BsStopFill } from "react-icons/bs";
 
-function Task({ id }) {
+function Task({ id, title, description, hoursWorked }) {
   const [started, setStarted] = useState(false);
   const pointing = {
     cursor: "pointer",
@@ -20,6 +20,10 @@ function Task({ id }) {
     );
 
     console.log(new Date());
+    console.log(hoursWorked);
+    console.log(title);
+    console.log(description);
+    console.log(id);
     setDateStart(new Date());
 
     // Fazer um update na task, atualizando no banco de dados a hora da última vez que a tarefa foi inicializada
