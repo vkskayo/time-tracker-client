@@ -34,12 +34,12 @@ function Task({ id, title, description, hoursWorked, startedHour, isStarted }) {
       variables: {
         id: id,
         taskUpdateInput: {
-          startedHour: `${new Date().getHours()}:${new Date().getMinutes()}`,
+          startedHour: new Date().getTime().toString(),
           isStarted: true,
         },
       },
     });
-    setStartedHourState(`${new Date().getHours()}:${new Date().getMinutes()}`);
+    setStartedHourState(new Date().getTime().toString());
 
     // Fazer um update na task, atualizando no banco de dados a hora da última vez que a tarefa foi inicializada
     // Faço a diferença do horario atual com o horario calculado acima e somo com as horas trabalhadas na tarefa do banco de dados
@@ -67,22 +67,15 @@ function Task({ id, title, description, hoursWorked, startedHour, isStarted }) {
 
   function calculateTaskTime(startHour) {
     if (startHour == "null") {
-      return "0 minutes";
+      return "0";
     }
-    const startTimeOfTask = startHour.split(":");
-    const startTimeOfTaskInMinutes =
-      startTimeOfTask[0] * 60 + startTimeOfTask[1] * 1;
-
-    const currentTimeInMinutes =
-      new Date().getHours() * 60 + new Date().getMinutes();
 
     const difference =
-      currentTimeInMinutes - startTimeOfTaskInMinutes + hoursWorked * 60;
-
-    return `${difference} minutes`;
+      new Date().getTime() - startHour + hoursWorked * 60 * 1000;
+    return (difference / (1000 * 60)).toString();
   }
 
-  useEffect(() => {
+  /*   useEffect(() => {
     if (started) {
       var interval = setInterval(() => {
         setTimeOfWork(calculateTaskTime(startedHour));
@@ -90,7 +83,7 @@ function Task({ id, title, description, hoursWorked, startedHour, isStarted }) {
     }
 
     return () => clearInterval(interval);
-  }, [started]);
+  }, [started]); */
 
   return (
     <div className="d-flex justify-content-between col-12 border p-2">
@@ -107,7 +100,7 @@ function Task({ id, title, description, hoursWorked, startedHour, isStarted }) {
       </div>
       <div className="d-flex gap-4 align-items-center">
         <p>0:03 - 1:04</p>
-        <p>{timeOfWork}</p>
+        <p>{Math.round(timeOfWork) + " minutes"}</p>
         {!started ? (
           <GiPlayButton
             style={pointing}
