@@ -1,30 +1,45 @@
 import { useEffect, useState } from "react";
 import { GiPlayButton } from "react-icons/gi";
 import { BsStopFill } from "react-icons/bs";
+import { gql, useMutation } from "@apollo/client";
 
-function Task({ id, title, description, hoursWorked }) {
-  const [started, setStarted] = useState(false);
+function Task({ id, title, description, hoursWorked, startedHour, isStarted }) {
+  const [started, setStarted] = useState(isStarted);
+  const [startedHourState, setStartedHourState] = useState(startedHour);
+
   const pointing = {
     cursor: "pointer",
   };
-  const [dateStart, setDateStart] = useState(new Date());
+  const [timeOfWork, setTimeOfWork] = useState(hoursWorked);
+
+  const UPDATE_TASK = gql`
+    mutation Mutation($id: ID!, $taskUpdateInput: TaskUpdateInput) {
+      updateTask(ID: $id, taskUpdateInput: $taskUpdateInput) {
+        id
+        title
+        description
+        hoursWorked
+        belongedDay
+        startedHour
+        isStarted
+      }
+    }
+  `;
+
+  const [updateTask, { data, loading, error }] = useMutation(UPDATE_TASK);
 
   function handleStartTask() {
     setStarted(true);
-
-    console.log(
-      new Date().getHours().toString() +
-        " hours and " +
-        new Date().getMinutes().toString() +
-        " minutes."
-    );
-
-    console.log(new Date());
-    console.log(hoursWorked);
-    console.log(title);
-    console.log(description);
-    console.log(id);
-    setDateStart(new Date());
+    updateTask({
+      variables: {
+        id: id,
+        taskUpdateInput: {
+          startedHour: `${new Date().getHours()}:${new Date().getMinutes()}`,
+          isStarted: true,
+        },
+      },
+    });
+    setStartedHourState(`${new Date().getHours()}:${new Date().getMinutes()}`);
 
     // Fazer um update na task, atualizando no banco de dados a hora da última vez que a tarefa foi inicializada
     // Faço a diferença do horario atual com o horario calculado acima e somo com as horas trabalhadas na tarefa do banco de dados
@@ -33,19 +48,49 @@ function Task({ id, title, description, hoursWorked }) {
     //Depois só colocar no frontend pro usuario
   }
 
-  /*  useEffect(() => {
-    setInterval(() => {
-      console.log((new Date() - dateStart) / 1000);
-    }, 1000);
-  }, []); */
-
   function handleStopTask() {
     setStarted(false);
+    updateTask({
+      variables: {
+        id: id,
+        taskUpdateInput: {
+          hoursWorked: calculateTaskTime(startedHourState),
+          isStarted: false,
+        },
+      },
+    });
     // Calculo o horario em que a tarefa foi pausada
     // Utilizado o horario da ultima vez que a tarefa foi iniciada, faço a diferença do horario que a tarefa foi pausada e o horario
     //que a tarefa foi iniciada pela ultima vez
     // Soma esta diferença no atributo da quantidade de horas trabalhadas na tarefa
   }
+
+  function calculateTaskTime(startHour) {
+    if (startHour == "null") {
+      return "0 minutes";
+    }
+    const startTimeOfTask = startHour.split(":");
+    const startTimeOfTaskInMinutes =
+      startTimeOfTask[0] * 60 + startTimeOfTask[1] * 1;
+
+    const currentTimeInMinutes =
+      new Date().getHours() * 60 + new Date().getMinutes();
+
+    const difference =
+      currentTimeInMinutes - startTimeOfTaskInMinutes + hoursWorked * 60;
+
+    return `${difference} minutes`;
+  }
+
+  useEffect(() => {
+    if (started) {
+      var interval = setInterval(() => {
+        setTimeOfWork(calculateTaskTime(startedHour));
+      }, 60000);
+    }
+
+    return () => clearInterval(interval);
+  }, [started]);
 
   return (
     <div className="d-flex justify-content-between col-12 border p-2">
@@ -57,15 +102,12 @@ function Task({ id, title, description, hoursWorked }) {
             value=""
             id="flexCheckDefault"
           />
-          {/*        <label class="form-check-label" for="flexCheckDefault">
-              Default checkbox
-            </label> */}
         </div>
         <p>(No description)</p>
       </div>
       <div className="d-flex gap-4 align-items-center">
         <p>0:03 - 1:04</p>
-        <p>1 h 01 min</p>
+        <p>{timeOfWork}</p>
         {!started ? (
           <GiPlayButton
             style={pointing}

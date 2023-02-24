@@ -7,8 +7,16 @@ import { FiMoreHorizontal } from "react-icons/fi";
 import { gql, useMutation } from "@apollo/client";
 import React from "react";
 
-function DayNavigator({ today }) {
-  const [currentDate, setCurrentDate] = useState(new Date().toLocaleString());
+function DayNavigator() {
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  let mm = today.getMonth() + 1;
+  let dd = today.getDate();
+
+  if (dd < 10) dd = "0" + dd;
+  if (mm < 10) mm = "0" + mm;
+
+  const formattedToday = dd + "/" + mm + "/" + yyyy;
 
   const START_DAY = gql`
     mutation Mutation($dayInput: DayInput) {
@@ -31,7 +39,7 @@ function DayNavigator({ today }) {
         dayInput: {
           title: "First mutation in frontend",
           description: "description",
-          date: "22/02/2023",
+          date: formattedToday,
         },
       },
     });
@@ -57,7 +65,7 @@ function DayNavigator({ today }) {
           <FcCalendar size={40} />
         </div>
       </div>
-      <div className="d-flex flex-column col-12 col-md-8 border p-4 day-box">
+      <div className="d-flex flex-column col-12 col-md-8 p-4 day-box">
         <div className="d-flex justify-content-between">
           <div className="d-flex flex-column align-items-start">
             <p>Total Hours :</p>

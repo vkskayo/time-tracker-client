@@ -13,6 +13,7 @@ function TaskTable() {
         hoursWorked
         belongedDay
         startedHour
+        isStarted
       }
     }
   `;
@@ -36,6 +37,8 @@ function TaskTable() {
     },
   });
 
+  console.log(todayVar);
+
   return (
     <div className="d-flex flex-column align-items-center col-12 col-md-8 mx-auto">
       {todayVar.map((task) => {
@@ -46,6 +49,8 @@ function TaskTable() {
             hoursWorked={task.hoursWorked}
             key={task.id}
             id={task.id}
+            startedHour={task.startedHour}
+            isStarted={task.isStarted}
           />
         );
       })}

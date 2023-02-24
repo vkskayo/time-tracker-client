@@ -9,6 +9,7 @@ body {
 
 .day-box {
   background-color: #363945;
+  border: solid 1px rgb(40, 47, 59);
 }
 
 h1,
@@ -24,21 +25,22 @@ p {
 .day-bar {
   /*   width: 400px; */
   height: 100vh;
-  background-color: rgb(36, 36, 42);
+  /*  background-color: rgb(36, 36, 42); */
+  /*   background-color: rgb(17, 24, 37); */
+  background-color: rgb(4, 6, 9);
   /*   overflow-y: scroll; */
   overflow-x: hidden;
-  border: solid 1px white;
+  border: solid 1px rgb(40, 47, 59);
 }
 
 .day-bar-item {
-  border: solid 1px;
   padding: 10px;
   border-radius: 10px;
   cursor: pointer;
 }
 
 .day-bar-item:hover {
-  background-color: gray;
+  background-color: rgb(40, 47, 59);
 }
 
 .home-page-container {
@@ -47,4 +49,27 @@ p {
 
 a {
   text-decoration: none;
+}
+
+.day-bar-panel {
+  /*  background-color: rgb(17, 24, 37); */
+  background-color: rgb(4, 6, 9);
+  border: solid 2px rgb(40, 47, 59);
+  width: 200px;
+  margin: auto;
+  border-radius: 5px;
+  padding: 2px;
+  min-height: 50px;
+  cursor: pointer;
+}
+
+.day-bar-panel-item {
+  width: 100px;
+  padding: 5px;
+  border-radius: 4px;
+  min-height: 45px;
+}
+
+.panel-text {
+  font-family: Arial, Helvetica, sans-serif;
 }
