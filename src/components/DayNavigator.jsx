@@ -45,7 +45,7 @@ function DayNavigator() {
     hoursWorkedToday / 60
   )}h ${Math.floor(
     hoursWorkedToday - Math.floor(hoursWorkedToday / 60) * 60
-  )}m ${Math.floor(
+  )}m ${Math.round(
     (hoursWorkedToday -
       Math.floor(hoursWorkedToday / 60) * 60 -
       Math.floor(hoursWorkedToday - Math.floor(hoursWorkedToday / 60) * 60)) *

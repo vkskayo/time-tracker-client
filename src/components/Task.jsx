@@ -4,12 +4,16 @@ import { BsStopFill } from "react-icons/bs";
 import { AiFillLock } from "react-icons/ai";
 import { gql, useMutation } from "@apollo/client";
 import { isTodayClosed } from "../atoms/isTodayClosed";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
+import { accumulatedTodayWorkTime } from "../atoms/accumulatedTodayWorkTime";
 
 function Task({ id, title, description, hoursWorked, startedHour, isStarted }) {
   const [started, setStarted] = useState(isStarted);
   const [startedHourState, setStartedHourState] = useState(startedHour);
   const isClosed = useRecoilValue(isTodayClosed);
+  const [todayWorkTime, setTodayWorkTime] = useRecoilState(
+    accumulatedTodayWorkTime
+  );
 
   const pointing = {
     cursor: "pointer",
@@ -54,6 +58,7 @@ function Task({ id, title, description, hoursWorked, startedHour, isStarted }) {
 
   function handleStopTask() {
     setStarted(false);
+    setTimeOfWork(calculateTaskTime(startedHourState));
     updateTask({
       variables: {
         id: id,
@@ -79,15 +84,16 @@ function Task({ id, title, description, hoursWorked, startedHour, isStarted }) {
     return (difference / (1000 * 60)).toString();
   }
 
-  /*   useEffect(() => {
+  useEffect(() => {
     if (started) {
       var interval = setInterval(() => {
-        setTimeOfWork(calculateTaskTime(startedHour));
+        setTimeOfWork(calculateTaskTime(startedHourState));
+        setTodayWorkTime(todayWorkTime + 1);
       }, 60000);
     }
 
     return () => clearInterval(interval);
-  }, [started]); */
+  }, [started]);
 
   return (
     <div className="d-flex justify-content-between col-12 border p-2">
@@ -103,7 +109,9 @@ function Task({ id, title, description, hoursWorked, startedHour, isStarted }) {
         <p>{title}</p>
       </div>
       <div className="d-flex gap-4 align-items-center">
-        <p>{Math.round(timeOfWork) + " minutes"}</p>
+        <p>{`${Math.floor(timeOfWork)}m ${Math.round(
+          (timeOfWork - Math.floor(timeOfWork)) * 60
+        )}s`}</p>
         {isClosed ? (
           <AiFillLock color="white" size={30} />
         ) : (

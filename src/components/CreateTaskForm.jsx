@@ -33,7 +33,6 @@ function CreateTaskForm() {
     isTodayStateInitializedLoading
   );
   const [isClosed, setIsClosed] = useRecoilState(isTodayClosed);
-  console.log(isClosed);
 
   const CREATE_TASK = gql`
     mutation Mutation($taskInput: TaskInput) {
