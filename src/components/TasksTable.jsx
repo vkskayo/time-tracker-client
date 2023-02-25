@@ -37,8 +37,6 @@ function TaskTable() {
     },
   });
 
-  console.log(todayVar);
-
   return (
     <div className="d-flex flex-column align-items-center col-12 col-md-8 mx-auto">
       {todayVar.map((task) => {

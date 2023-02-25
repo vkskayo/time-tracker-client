@@ -96,10 +96,9 @@ function Task({ id, title, description, hoursWorked, startedHour, isStarted }) {
             id="flexCheckDefault"
           />
         </div>
-        <p>(No description)</p>
+        <p>{title}</p>
       </div>
       <div className="d-flex gap-4 align-items-center">
-        <p>0:03 - 1:04</p>
         <p>{Math.round(timeOfWork) + " minutes"}</p>
         {!started ? (
           <GiPlayButton

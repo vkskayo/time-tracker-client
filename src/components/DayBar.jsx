@@ -12,6 +12,7 @@ function DayBar() {
         description
         hoursWorked
         date
+        closed
       }
     }
   `;
@@ -68,15 +69,17 @@ function DayBar() {
 
       {panelSelected == "days"
         ? days.map((day) => {
-            return (
-              <DayBarItem
-                key={day.id}
-                id={day.id}
-                title={day.title}
-                date={day.date}
-                isToday={false}
-              />
-            );
+            if (day.closed) {
+              return (
+                <DayBarItem
+                  key={day.id}
+                  id={day.id}
+                  title={day.title}
+                  date={day.date}
+                  isToday={false}
+                />
+              );
+            }
           })
         : null}
     </div>

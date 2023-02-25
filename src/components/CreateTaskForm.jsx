@@ -2,6 +2,15 @@ import { useState, useEffect } from "react";
 import { BsFillCalendarMonthFill } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
 import { gql, useMutation, useQuery } from "@apollo/client";
+import { isTodayStateInitialized } from "../atoms/isTodayInitialized";
+import { isTodayStateInitializedLoading } from "../atoms/isTodayInitializedLoading";
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+} from "recoil";
 
 function CreateTaskForm() {
   const [today, setToday] = useState(new Date());
@@ -16,7 +25,12 @@ function CreateTaskForm() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [belongedDay, setBelongedDay] = useState(formattedToday);
-  const [isTodayInitialized, setIsTodayInitialized] = useState(false);
+  const [isTodayInitialized, setIsTodayInitialized] = useRecoilState(
+    isTodayStateInitialized
+  );
+  const [isLoading, setIsLoading] = useRecoilState(
+    isTodayStateInitializedLoading
+  );
 
   const CREATE_TASK = gql`
     mutation Mutation($taskInput: TaskInput) {
@@ -39,6 +53,7 @@ function CreateTaskForm() {
         description
         hoursWorked
         date
+        closed
       }
     }
   `;
@@ -48,7 +63,10 @@ function CreateTaskForm() {
       date: formattedToday,
     },
     onCompleted: (queryData) => {
-      setIsTodayInitialized(queryData.getDayByDate);
+      if (queryData.getDayByDate) {
+        setIsTodayInitialized(true);
+      }
+      setIsLoading(false);
     },
   });
 
@@ -80,6 +98,7 @@ function CreateTaskForm() {
           <button onClick={handleTaskCreation}>Create task</button>
         </div>
       ) : null}
+      {}
     </>
   );
 }

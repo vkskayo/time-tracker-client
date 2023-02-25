@@ -1,14 +1,16 @@
 import { useState } from "react";
 import DayBar from "../components/DayBar";
-import { useQuery, gql, useLazyQuery } from "@apollo/client";
+import { useQuery, gql } from "@apollo/client";
+import { useParams } from "react-router-dom";
 
 function Day() {
-  const [today, setToday] = useState("");
   const [day, setDay] = useState([]);
+  const id = useParams().id;
+  console.log(id);
 
-  const DAYS = gql`
-    query {
-      getDays {
+  const GET_DAY = gql`
+    query GetDayById($getDayByIdId: ID!) {
+      getDayById(id: $getDayByIdId) {
         id
         title
         description
@@ -18,15 +20,19 @@ function Day() {
     }
   `;
 
-  /*   const { loading, error, data } = useQuery(DAYS, {
+  const { loading, error, data } = useQuery(GET_DAY, {
+    variables: {
+      getDayByIdId: id,
+    },
     onCompleted: (queryData) => {
-      setDays(queryData.getDays);
+      setDay(queryData.getDayById);
     },
   });
-  console.log(days); */
+  console.log(day);
   return (
-    <div className="">
+    <div className="d-flex">
       <DayBar />
+      <h1 className="text-light mx-auto">asdlk</h1>
     </div>
   );
 }

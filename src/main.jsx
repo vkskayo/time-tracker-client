@@ -4,6 +4,13 @@ import App from "./App";
 import Day from "./pages/Day";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+} from "recoil";
 import "./index.css";
 
 const client = new ApolloClient({
@@ -27,8 +34,10 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <ApolloProvider client={client}>
-      <RouterProvider router={router} />
-    </ApolloProvider>
+    <RecoilRoot>
+      <ApolloProvider client={client}>
+        <RouterProvider router={router} />
+      </ApolloProvider>
+    </RecoilRoot>
   </React.StrictMode>
 );
