@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Task from "./Task";
 import { useQuery, gql, useLazyQuery } from "@apollo/client";
+import { accumulatedTodayWorkTime } from "../atoms/accumulatedTodayWorkTime";
+import { useRecoilState } from "recoil";
 
 function TaskTable() {
   const [todayVar, setTodayVar] = useState([]);
@@ -27,6 +29,9 @@ function TaskTable() {
   if (mm < 10) mm = "0" + mm;
 
   const formattedToday = dd + "/" + mm + "/" + yyyy;
+  const [hoursWorkedToday, setHoursWorkedToday] = useRecoilState(
+    accumulatedTodayWorkTime
+  );
 
   const { loading, error, data } = useQuery(GET_TASKS, {
     variables: {
@@ -34,8 +39,17 @@ function TaskTable() {
     },
     onCompleted: (queryData) => {
       setTodayVar(queryData.getTasksByDay);
+      setHoursWorkedToday(
+        queryData.getTasksByDay.reduce(
+          (accumulator, currentValue) =>
+            accumulator + parseFloat(currentValue.hoursWorked),
+          0
+        )
+      );
     },
   });
+
+  console.log(hoursWorkedToday);
 
   return (
     <div className="d-flex flex-column align-items-center col-12 col-md-8 mx-auto">

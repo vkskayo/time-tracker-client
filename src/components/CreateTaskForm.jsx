@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { isTodayStateInitialized } from "../atoms/isTodayInitialized";
 import { isTodayStateInitializedLoading } from "../atoms/isTodayInitializedLoading";
+import { isTodayClosed } from "../atoms/isTodayClosed";
 import {
   RecoilRoot,
   atom,
@@ -31,6 +32,8 @@ function CreateTaskForm() {
   const [isLoading, setIsLoading] = useRecoilState(
     isTodayStateInitializedLoading
   );
+  const [isClosed, setIsClosed] = useRecoilState(isTodayClosed);
+  console.log(isClosed);
 
   const CREATE_TASK = gql`
     mutation Mutation($taskInput: TaskInput) {
@@ -65,6 +68,7 @@ function CreateTaskForm() {
     onCompleted: (queryData) => {
       if (queryData.getDayByDate) {
         setIsTodayInitialized(true);
+        setIsClosed(queryData.getDayByDate.closed);
       }
       setIsLoading(false);
     },
@@ -88,7 +92,7 @@ function CreateTaskForm() {
 
   return (
     <>
-      {isTodayInitialized ? (
+      {isTodayInitialized && !isClosed ? (
         <div className="mb-5">
           <input onChange={(e) => setTitle(e.target.value)} value={title} />
           <input
@@ -98,7 +102,6 @@ function CreateTaskForm() {
           <button onClick={handleTaskCreation}>Create task</button>
         </div>
       ) : null}
-      {}
     </>
   );
 }

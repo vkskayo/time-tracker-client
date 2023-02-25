@@ -10,6 +10,7 @@ import { isTodayStateInitialized } from "../atoms/isTodayInitialized";
 import { isTodayStateInitializedLoading } from "../atoms/isTodayInitializedLoading";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { RxEyeClosed, RxEyeNone, RxEyeOpen } from "react-icons/rx";
+import { accumulatedTodayWorkTime } from "../atoms/accumulatedTodayWorkTime";
 
 function DayNavigator() {
   const today = new Date();
@@ -39,6 +40,17 @@ function DayNavigator() {
     isTodayStateInitialized
   );
   const isLoading = useRecoilValue(isTodayStateInitializedLoading);
+  const hoursWorkedToday = useRecoilValue(accumulatedTodayWorkTime);
+  const formattedHoursWorkedToday = `${Math.floor(
+    hoursWorkedToday / 60
+  )}h ${Math.floor(
+    hoursWorkedToday - Math.floor(hoursWorkedToday / 60) * 60
+  )}m ${Math.floor(
+    (hoursWorkedToday -
+      Math.floor(hoursWorkedToday / 60) * 60 -
+      Math.floor(hoursWorkedToday - Math.floor(hoursWorkedToday / 60) * 60)) *
+      60
+  )}s`;
 
   function handleDayInitialization(e) {
     e.preventDefault();
@@ -76,7 +88,7 @@ function DayNavigator() {
             <div className="d-flex justify-content-between">
               <div className="d-flex flex-column align-items-start">
                 <p>Total Hours :</p>
-                <h4>0</h4>
+                <h4>{formattedHoursWorkedToday}</h4>
               </div>
               <FiMoreHorizontal color="white" size={30} />
             </div>

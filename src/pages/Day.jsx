@@ -6,7 +6,6 @@ import { useParams } from "react-router-dom";
 function Day() {
   const [day, setDay] = useState([]);
   const id = useParams().id;
-  console.log(id);
 
   const GET_DAY = gql`
     query GetDayById($getDayByIdId: ID!) {
@@ -28,11 +27,11 @@ function Day() {
       setDay(queryData.getDayById);
     },
   });
-  console.log(day);
+
   return (
     <div className="d-flex">
       <DayBar />
-      <h1 className="text-light mx-auto">asdlk</h1>
+      <h1 className="text-light">asdlk</h1>
     </div>
   );
 }

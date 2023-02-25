@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import { GiPlayButton } from "react-icons/gi";
 import { BsStopFill } from "react-icons/bs";
+import { AiFillLock } from "react-icons/ai";
 import { gql, useMutation } from "@apollo/client";
+import { isTodayClosed } from "../atoms/isTodayClosed";
+import { useRecoilValue } from "recoil";
 
 function Task({ id, title, description, hoursWorked, startedHour, isStarted }) {
   const [started, setStarted] = useState(isStarted);
   const [startedHourState, setStartedHourState] = useState(startedHour);
+  const isClosed = useRecoilValue(isTodayClosed);
 
   const pointing = {
     cursor: "pointer",
@@ -100,20 +104,26 @@ function Task({ id, title, description, hoursWorked, startedHour, isStarted }) {
       </div>
       <div className="d-flex gap-4 align-items-center">
         <p>{Math.round(timeOfWork) + " minutes"}</p>
-        {!started ? (
-          <GiPlayButton
-            style={pointing}
-            onClick={handleStartTask}
-            color="white"
-            size={30}
-          />
+        {isClosed ? (
+          <AiFillLock color="white" size={30} />
         ) : (
-          <BsStopFill
-            style={pointing}
-            onClick={handleStopTask}
-            color="red"
-            size={30}
-          />
+          <>
+            {!started ? (
+              <GiPlayButton
+                style={pointing}
+                onClick={handleStartTask}
+                color="white"
+                size={30}
+              />
+            ) : (
+              <BsStopFill
+                style={pointing}
+                onClick={handleStopTask}
+                color="red"
+                size={30}
+              />
+            )}
+          </>
         )}
       </div>
     </div>
