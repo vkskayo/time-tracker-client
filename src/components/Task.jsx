@@ -48,12 +48,6 @@ function Task({ id, title, description, hoursWorked, startedHour, isStarted }) {
       },
     });
     setStartedHourState(new Date().getTime().toString());
-
-    // Fazer um update na task, atualizando no banco de dados a hora da última vez que a tarefa foi inicializada
-    // Faço a diferença do horario atual com o horario calculado acima e somo com as horas trabalhadas na tarefa do banco de dados
-    // O ultimo valor calculado nada mais é que a quantidade de tempo trabalhado na tarefa em tempo real
-    // Provavelmente a colocarei em uma variavel de estado que vai estar sendo constantemente calculada(a cada 1 minuto)
-    //Depois só colocar no frontend pro usuario
   }
 
   function handleStopTask() {
@@ -68,10 +62,6 @@ function Task({ id, title, description, hoursWorked, startedHour, isStarted }) {
         },
       },
     });
-    // Calculo o horario em que a tarefa foi pausada
-    // Utilizado o horario da ultima vez que a tarefa foi iniciada, faço a diferença do horario que a tarefa foi pausada e o horario
-    //que a tarefa foi iniciada pela ultima vez
-    // Soma esta diferença no atributo da quantidade de horas trabalhadas na tarefa
   }
 
   function calculateTaskTime(startHour) {
@@ -84,11 +74,19 @@ function Task({ id, title, description, hoursWorked, startedHour, isStarted }) {
     return (difference / (1000 * 60)).toString();
   }
 
+  function calculateDifference(startHour) {
+    const difference = (new Date().getTime() - startHour) / (1000 * 60);
+    return difference;
+  }
+
   useEffect(() => {
     if (started) {
+      setTimeOfWork(calculateTaskTime(startedHourState));
+      setTodayWorkTime(todayWorkTime + calculateDifference(startedHourState));
+
       var interval = setInterval(() => {
         setTimeOfWork(calculateTaskTime(startedHourState));
-        setTodayWorkTime(todayWorkTime + 1);
+        setTodayWorkTime(todayWorkTime + calculateDifference(startedHourState));
       }, 60000);
     }
 
