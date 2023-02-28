@@ -30,59 +30,65 @@ function DayBar() {
   };
 
   return (
-    <div className="day-bar text-light d-none d-md-block col-3">
-      <div className="day-bar-panel d-flex my-3 justify-content-center align-items-center">
-        {panelSelected == "days" ? (
-          <div
-            style={daysPanelStyle}
-            className="day-bar-panel-item d-flex justify-content-center align-items-center"
-          >
-            <p className="text-light panel-text">Days</p>
-          </div>
-        ) : (
-          <div
-            onClick={() => setPanelSelected("days")}
-            className="day-bar-panel-item d-flex justify-content-center align-items-center"
-          >
-            <p className="text-light panel-text">Days</p>
-          </div>
-        )}
+    <>
+      {!error ? (
+        <div className="day-bar text-light d-none d-md-block col-3">
+          <div className="day-bar-panel d-flex my-3 justify-content-center align-items-center">
+            {panelSelected == "days" ? (
+              <div
+                style={daysPanelStyle}
+                className="day-bar-panel-item d-flex justify-content-center align-items-center"
+              >
+                <p className="text-light panel-text">Days</p>
+              </div>
+            ) : (
+              <div
+                onClick={() => setPanelSelected("days")}
+                className="day-bar-panel-item d-flex justify-content-center align-items-center"
+              >
+                <p className="text-light panel-text">Days</p>
+              </div>
+            )}
 
-        {panelSelected == "analytics" ? (
-          <div
-            style={daysPanelStyle}
-            className="day-bar-panel-item d-flex justify-content-center align-items-center"
-          >
-            <p className="text-light panel-text">Analytics</p>
+            {panelSelected == "analytics" ? (
+              <div
+                style={daysPanelStyle}
+                className="day-bar-panel-item d-flex justify-content-center align-items-center"
+              >
+                <p className="text-light panel-text">Analytics</p>
+              </div>
+            ) : (
+              <div
+                onClick={() => setPanelSelected("analytics")}
+                className="day-bar-panel-item d-flex justify-content-center align-items-center"
+              >
+                <p className="text-light panel-text">Analytics</p>
+              </div>
+            )}
           </div>
-        ) : (
-          <div
-            onClick={() => setPanelSelected("analytics")}
-            className="day-bar-panel-item d-flex justify-content-center align-items-center"
-          >
-            <p className="text-light panel-text">Analytics</p>
-          </div>
-        )}
-      </div>
 
-      <DayBarItem isToday={true} />
+          <DayBarItem isToday={true} />
 
-      {panelSelected == "days"
-        ? days.map((day) => {
-            if (day.closed) {
-              return (
-                <DayBarItem
-                  key={day.id}
-                  id={day.id}
-                  title={day.title}
-                  date={day.date}
-                  isToday={false}
-                />
-              );
-            }
-          })
-        : null}
-    </div>
+          {panelSelected == "days"
+            ? days.map((day) => {
+                if (day.closed) {
+                  return (
+                    <DayBarItem
+                      key={day.id}
+                      id={day.id}
+                      title={day.title}
+                      date={day.date}
+                      isToday={false}
+                    />
+                  );
+                }
+              })
+            : null}
+        </div>
+      ) : (
+        <h3 className="text-center my-5 col-12">The server is down...</h3>
+      )}
+    </>
   );
 }
 

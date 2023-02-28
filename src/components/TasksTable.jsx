@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Task from "./Task";
 import { useQuery, gql, useLazyQuery } from "@apollo/client";
 import { accumulatedTodayWorkTime } from "../atoms/accumulatedTodayWorkTime";
 import { useRecoilState } from "recoil";
+import { todayTasks } from "../atoms/todayTasks";
 
 function TaskTable() {
-  const [todayVar, setTodayVar] = useState([]);
+  const [todayVar, setTodayVar] = useRecoilState(todayTasks);
   const GET_TASKS = gql`
     query Query($date: String!) {
       getTasksByDay(date: $date) {
@@ -50,7 +51,7 @@ function TaskTable() {
   });
 
   return (
-    <div className="d-flex flex-column align-items-center col-12 col-md-8 mx-auto">
+    <div className="d-flex flex-column align-items-center col-12 col-md-8 mx-auto mb-5 h-100">
       {todayVar.map((task) => {
         return (
           <Task

@@ -6,6 +6,8 @@ import { gql, useMutation } from "@apollo/client";
 import { isTodayClosed } from "../atoms/isTodayClosed";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { accumulatedTodayWorkTime } from "../atoms/accumulatedTodayWorkTime";
+import { todayTasks } from "../atoms/todayTasks";
+import { intervalCounterState } from "../atoms/intervalCounter";
 
 function Task({ id, title, description, hoursWorked, startedHour, isStarted }) {
   const [started, setStarted] = useState(isStarted);
@@ -14,6 +16,12 @@ function Task({ id, title, description, hoursWorked, startedHour, isStarted }) {
   const [todayWorkTime, setTodayWorkTime] = useRecoilState(
     accumulatedTodayWorkTime
   );
+  /*   const [intervalCounter, setIntervalCounter] =
+    useRecoilState(intervalCounterState);
+  console.log(intervalCounter); */
+  const [tickDifference, setTickDifference] = useState(0);
+
+  const [tasksToday, setTasksToday] = useRecoilState(todayTasks);
 
   const pointing = {
     cursor: "pointer",
@@ -37,6 +45,7 @@ function Task({ id, title, description, hoursWorked, startedHour, isStarted }) {
   const [updateTask, { data, loading, error }] = useMutation(UPDATE_TASK);
 
   function handleStartTask() {
+    setStartedHourState(new Date().getTime().toString());
     setStarted(true);
     updateTask({
       variables: {
@@ -46,8 +55,16 @@ function Task({ id, title, description, hoursWorked, startedHour, isStarted }) {
           isStarted: true,
         },
       },
+    }).then((res) => {
+      setTasksToday(
+        tasksToday.map((task) => {
+          if (task.id == id) {
+            return res.data.updateTask;
+          }
+          return task;
+        })
+      );
     });
-    setStartedHourState(new Date().getTime().toString());
   }
 
   function handleStopTask() {
@@ -61,7 +78,23 @@ function Task({ id, title, description, hoursWorked, startedHour, isStarted }) {
           isStarted: false,
         },
       },
+    }).then((res) => {
+      setTasksToday(
+        tasksToday.map((task) => {
+          if (task.id == id) {
+            return res.data.updateTask;
+          }
+          return task;
+        })
+      );
     });
+    /*     if (tickDifference) {
+      setTodayWorkTime(
+        todayWorkTime + calculateDifference(startedHourState) - tickDifference
+      );
+    } else {
+      setTodayWorkTime(todayWorkTime + calculateDifference(startedHourState));
+    } */
   }
 
   function calculateTaskTime(startHour) {
@@ -82,16 +115,26 @@ function Task({ id, title, description, hoursWorked, startedHour, isStarted }) {
   useEffect(() => {
     if (started) {
       setTimeOfWork(calculateTaskTime(startedHourState));
-      setTodayWorkTime(todayWorkTime + calculateDifference(startedHourState));
 
       var interval = setInterval(() => {
         setTimeOfWork(calculateTaskTime(startedHourState));
         setTodayWorkTime(todayWorkTime + calculateDifference(startedHourState));
+        setTickDifference(
+          tickDifference + calculateDifference(startedHourState)
+        );
       }, 60000);
     }
 
     return () => clearInterval(interval);
   }, [started]);
+
+  useEffect(() => {
+    if (started) {
+      setTodayWorkTime(todayWorkTime + calculateDifference(startedHourState));
+    }
+  }, []);
+
+  console.log(tickDifference);
 
   return (
     <div className="d-flex justify-content-between col-12 border p-2">

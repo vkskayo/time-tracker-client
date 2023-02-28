@@ -5,6 +5,7 @@ import { gql, useMutation, useQuery } from "@apollo/client";
 import { isTodayStateInitialized } from "../atoms/isTodayInitialized";
 import { isTodayStateInitializedLoading } from "../atoms/isTodayInitializedLoading";
 import { isTodayClosed } from "../atoms/isTodayClosed";
+import { todayTasks } from "../atoms/todayTasks";
 import {
   RecoilRoot,
   atom,
@@ -33,6 +34,7 @@ function CreateTaskForm() {
     isTodayStateInitializedLoading
   );
   const [isClosed, setIsClosed] = useRecoilState(isTodayClosed);
+  const [tasksToday, setTasksToday] = useRecoilState(todayTasks);
 
   const CREATE_TASK = gql`
     mutation Mutation($taskInput: TaskInput) {
@@ -86,20 +88,29 @@ function CreateTaskForm() {
           startedHour: "null",
         },
       },
+    }).then((res) => {
+      setTasksToday([...tasksToday, res.data.createTask]);
+      setTitle("");
+      setDescription("");
     });
   }
 
   return (
     <>
       {isTodayInitialized && !isClosed ? (
-        <div className="mb-5">
-          <input onChange={(e) => setTitle(e.target.value)} value={title} />
+        <form onSubmit={handleTaskCreation} className="mb-5">
           <input
+            required
+            onChange={(e) => setTitle(e.target.value)}
+            value={title}
+          />
+          <input
+            required
             onChange={(e) => setDescription(e.target.value)}
             value={description}
           />
-          <button onClick={handleTaskCreation}>Create task</button>
-        </div>
+          <button type="submit">Create task</button>
+        </form>
       ) : null}
     </>
   );

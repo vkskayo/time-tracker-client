@@ -28,10 +28,16 @@ function Day() {
     },
   });
 
+  console.log(day);
+
   return (
     <div className="d-flex">
       <DayBar />
-      <h1 className="text-light">asdlk</h1>
+      <div className="mx-auto d-flex flex-column gap-3 my-4">
+        <h2 className="text-light">{day.date}</h2>
+        <h3 className="text-light">{day.title}</h3>
+        <p className="text-light">{day.description}</p>
+      </div>
     </div>
   );
 }

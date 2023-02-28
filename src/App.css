@@ -24,7 +24,7 @@ p {
 
 .day-bar {
   /*   width: 400px; */
-  height: 100vh;
+  /*   height: 100vh; */
   /*  background-color: rgb(36, 36, 42); */
   /*   background-color: rgb(17, 24, 37); */
   background-color: rgb(4, 6, 9);
@@ -45,6 +45,7 @@ p {
 
 .home-page-container {
   overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 a {
