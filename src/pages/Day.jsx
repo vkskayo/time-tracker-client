@@ -2,6 +2,7 @@ import { useState } from "react";
 import DayBar from "../components/DayBar";
 import { useQuery, gql } from "@apollo/client";
 import { useParams } from "react-router-dom";
+import DisplayTasks from "../components/DisplayTasks";
 
 function Day() {
   const [day, setDay] = useState([]);
@@ -28,8 +29,6 @@ function Day() {
     },
   });
 
-  console.log(day);
-
   return (
     <div className="d-flex">
       <DayBar />
@@ -37,6 +36,8 @@ function Day() {
         <h2 className="text-light">{day.date}</h2>
         <h3 className="text-light">{day.title}</h3>
         <p className="text-light">{day.description}</p>
+        <h1 className="text-light text-center my-4">Tasks</h1>
+        <DisplayTasks date={day.date} />
       </div>
     </div>
   );
