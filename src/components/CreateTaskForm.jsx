@@ -67,6 +67,7 @@ function CreateTaskForm() {
       date: formattedToday,
     },
     onCompleted: (queryData) => {
+      console.log("test");
       if (queryData.getDayByDate) {
         setIsTodayInitialized(true);
         setIsClosed(queryData.getDayByDate.closed);
@@ -78,6 +79,7 @@ function CreateTaskForm() {
   const [createTask, { data, loading, error }] = useMutation(CREATE_TASK);
 
   function handleTaskCreation(e) {
+    console.log("test");
     e.preventDefault();
     createTask({
       variables: {
@@ -89,9 +91,11 @@ function CreateTaskForm() {
         },
       },
     }).then((res) => {
+      /*       console.log("test");
       setTasksToday([...tasksToday, res.data.createTask]);
       setTitle("");
-      setDescription("");
+      setDescription(""); */
+      location.reload();
     });
   }
 

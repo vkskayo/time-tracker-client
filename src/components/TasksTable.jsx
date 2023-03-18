@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Task from "./Task";
 import { useQuery, gql, useLazyQuery } from "@apollo/client";
 import { accumulatedTodayWorkTime } from "../atoms/accumulatedTodayWorkTime";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { todayTasks } from "../atoms/todayTasks";
 
 function TaskTable() {
@@ -34,7 +34,7 @@ function TaskTable() {
     accumulatedTodayWorkTime
   );
 
-  const { loading, error, data } = useQuery(GET_TASKS, {
+  /*   const { loading, error, data } = useQuery(GET_TASKS, {
     variables: {
       date: formattedToday,
     },
@@ -48,7 +48,31 @@ function TaskTable() {
         )
       );
     },
-  });
+  }); */
+
+  const [updateTasksByState, { loading, error, data }] = useLazyQuery(
+    GET_TASKS,
+    {
+      onCompleted: (queryData) => {
+        setTodayVar(queryData.getTasksByDay);
+        setHoursWorkedToday(
+          queryData.getTasksByDay.reduce(
+            (accumulator, currentValue) =>
+              accumulator + parseFloat(currentValue.hoursWorked),
+            0
+          )
+        );
+      },
+    }
+  );
+
+  useEffect(() => {
+    updateTasksByState({
+      variables: {
+        date: formattedToday,
+      },
+    });
+  }, []);
 
   return (
     <div className="d-flex flex-column align-items-center col-12 col-md-8 mx-auto mb-5 h-100">

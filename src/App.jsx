@@ -10,7 +10,7 @@ function App() {
       <div className="d-flex home-page-container">
         <DayBar />
 
-        <div className="d-flex flex-column col-10">
+        <div className="d-flex flex-column col-9 mx-auto">
           <DayNavigator />
           <CreateTaskForm />
           <TaskTable />

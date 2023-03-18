@@ -8,6 +8,8 @@ import { isTodayStateInitializedLoading } from "../atoms/isTodayInitializedLoadi
 import { useRecoilValue, useRecoilState } from "recoil";
 import { RxEyeClosed, RxEyeNone, RxEyeOpen } from "react-icons/rx";
 import { accumulatedTodayWorkTime } from "../atoms/accumulatedTodayWorkTime";
+import CloseDay from "./closeDay";
+import { isTodayClosed } from "../atoms/isTodayClosed";
 
 function DayNavigator() {
   const today = new Date();
@@ -36,6 +38,7 @@ function DayNavigator() {
   const [isTodayInitialized, setIsTodayInitialized] = useRecoilState(
     isTodayStateInitialized
   );
+  let closed = useRecoilValue(isTodayClosed);
   const isLoading = useRecoilValue(isTodayStateInitializedLoading);
   const hoursWorkedToday = useRecoilValue(accumulatedTodayWorkTime);
   const formattedHoursWorkedToday = `${Math.floor(
@@ -88,11 +91,13 @@ function DayNavigator() {
               <FiMoreHorizontal color="white" size={30} />
             </div>
             <p>To be finished yet...</p>
+            {/* {isTodayInitialized && !closed ? <CloseDay /> : null} */}
+
             {!isTodayInitialized ? (
               <>
                 <form
                   onSubmit={handleDayInitialization}
-                  className="mt-5 d-flex flex-column w-50 gap-2"
+                  className="mt-5 d-flex flex-column col-md-6 col-12 gap-2"
                 >
                   <input
                     value={title}
@@ -103,11 +108,11 @@ function DayNavigator() {
                   <textarea
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    className="w-50"
+                    className="col-12"
                     required
                     placeholder="Insert a description"
                   />
-                  <button className="w-50" type="submit">
+                  <button className="mt-4" type="submit">
                     Start today's activity
                   </button>
                 </form>

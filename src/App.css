@@ -24,12 +24,7 @@ p {
 }
 
 .day-bar {
-  /*   width: 400px; */
-  /*   height: 100vh; */
-  /*  background-color: rgb(36, 36, 42); */
-  /*   background-color: rgb(17, 24, 37); */
   background-color: rgb(4, 6, 9);
-  /*   overflow-y: scroll; */
   overflow-x: hidden;
   border: solid 1px rgb(40, 47, 59);
   min-height: 100vh;
@@ -60,7 +55,6 @@ a {
 }
 
 .day-bar-panel {
-  /*  background-color: rgb(17, 24, 37); */
   background-color: rgb(4, 6, 9);
   border: solid 2px rgb(40, 47, 59);
   width: 200px;

@@ -7,18 +7,17 @@ import { isTodayClosed } from "../atoms/isTodayClosed";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { accumulatedTodayWorkTime } from "../atoms/accumulatedTodayWorkTime";
 import { todayTasks } from "../atoms/todayTasks";
-import { intervalCounterState } from "../atoms/intervalCounter";
 
 function Task({ id, title, description, hoursWorked, startedHour, isStarted }) {
   const [started, setStarted] = useState(isStarted);
+
   const [startedHourState, setStartedHourState] = useState(startedHour);
   const isClosed = useRecoilValue(isTodayClosed);
   const [todayWorkTime, setTodayWorkTime] = useRecoilState(
     accumulatedTodayWorkTime
   );
-  /*   const [intervalCounter, setIntervalCounter] =
-    useRecoilState(intervalCounterState);
-  console.log(intervalCounter); */
+  const [noTickHours, setNoTickHours] = useState(todayWorkTime);
+
   const [tickDifference, setTickDifference] = useState(0);
 
   const [tasksToday, setTasksToday] = useRecoilState(todayTasks);
@@ -43,7 +42,6 @@ function Task({ id, title, description, hoursWorked, startedHour, isStarted }) {
   `;
 
   const [updateTask, { data, loading, error }] = useMutation(UPDATE_TASK);
-
   function handleStartTask() {
     setStartedHourState(new Date().getTime().toString());
     setStarted(true);
@@ -59,6 +57,7 @@ function Task({ id, title, description, hoursWorked, startedHour, isStarted }) {
       setTasksToday(
         tasksToday.map((task) => {
           if (task.id == id) {
+            console.log(res.data.updateTask);
             return res.data.updateTask;
           }
           return task;
@@ -88,13 +87,9 @@ function Task({ id, title, description, hoursWorked, startedHour, isStarted }) {
         })
       );
     });
-    /*     if (tickDifference) {
-      setTodayWorkTime(
-        todayWorkTime + calculateDifference(startedHourState) - tickDifference
-      );
-    } else {
-      setTodayWorkTime(todayWorkTime + calculateDifference(startedHourState));
-    } */
+
+    /*     setNoTickHours(noTickHours + calculateDifference(startedHourState));
+    setTodayWorkTime(noTickHours + calculateDifference(startedHourState)); */
   }
 
   function calculateTaskTime(startHour) {
@@ -133,8 +128,6 @@ function Task({ id, title, description, hoursWorked, startedHour, isStarted }) {
       setTodayWorkTime(todayWorkTime + calculateDifference(startedHourState));
     }
   }, []);
-
-  console.log(tickDifference);
 
   return (
     <div className="d-flex justify-content-between col-12 border p-2">
