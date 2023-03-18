@@ -8,7 +8,7 @@ import { isTodayStateInitializedLoading } from "../atoms/isTodayInitializedLoadi
 import { useRecoilValue, useRecoilState } from "recoil";
 import { RxEyeClosed, RxEyeNone, RxEyeOpen } from "react-icons/rx";
 import { accumulatedTodayWorkTime } from "../atoms/accumulatedTodayWorkTime";
-import CloseDay from "./closeDay";
+import CloseDay from "./CloseDay";
 import { isTodayClosed } from "../atoms/isTodayClosed";
 
 function DayNavigator() {
