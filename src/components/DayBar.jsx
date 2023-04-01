@@ -32,7 +32,7 @@ function DayBar() {
   return (
     <>
       {!error ? (
-        <div className="day-bar text-light d-none d-md-block col-3">
+        <div className="day-bar text-light d-none d-md-block col-3 pb-5">
           <div className="day-bar-panel d-flex my-3 justify-content-center align-items-center">
             {panelSelected == "days" ? (
               <div

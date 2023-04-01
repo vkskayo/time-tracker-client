@@ -15,6 +15,7 @@ import "./index.css";
 
 const client = new ApolloClient({
   uri: "https://time-tracker-server-production.up.railway.app/graphql",
+  /*  uri: "http://localhost:4000/graphql", */
   cache: new InMemoryCache(),
   fetchOptions: {
     mode: "no-cors",

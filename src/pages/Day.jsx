@@ -33,9 +33,11 @@ function Day() {
     <div className="d-flex">
       <DayBar />
       <div className="mx-auto d-flex flex-column gap-3 my-4">
-        <h2 className="text-light">{day.date}</h2>
-        <h3 className="text-light">{day.title}</h3>
-        <p className="text-light">{day.description}</p>
+        <h2 className="text-light my-3">{day.title}</h2>
+        <p className="text-light col-6 mx-auto fs-5">{day.description}</p>
+        <p className="text-warning d-inline-block mx-auto fs-5 mb-5">
+          {day.date}
+        </p>
         <h1 className="text-light text-center my-4">Tasks</h1>
         <DisplayTasks date={day.date} />
       </div>

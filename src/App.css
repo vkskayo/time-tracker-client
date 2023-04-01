@@ -28,6 +28,7 @@ p {
   overflow-x: hidden;
   border: solid 1px rgb(40, 47, 59);
   min-height: 100vh;
+  /*  overflow-y: scroll; */
 }
 
 .day-bar-item {
